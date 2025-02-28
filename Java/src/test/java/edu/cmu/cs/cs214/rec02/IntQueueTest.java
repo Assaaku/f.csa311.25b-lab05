@@ -1,8 +1,5 @@
 package edu.cmu.cs.cs214.rec02;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -38,8 +40,8 @@ public class IntQueueTest {
     @Before
     public void setUp() {
         // comment/uncomment these lines to test each class
-        mQueue = new LinkedIntQueue();
-    //    mQueue = new ArrayIntQueue();
+    //    mQueue = new LinkedIntQueue();
+        mQueue = new ArrayIntQueue();
 
         testList = new ArrayList<>(List.of(1, 2, 3));
     }
@@ -53,20 +55,109 @@ public class IntQueueTest {
     @Test
     public void testNotEmpty() {
         // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        assertFalse(mQueue.isEmpty());
     }
 
     @Test
     public void testPeekEmptyQueue() {
         // TODO: write your own unit test
-        fail("Test not implemented");
+        assertNull(mQueue.peek());
     }
 
     @Test
     public void testPeekNoEmptyQueue() {
         // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        assertEquals(Integer.valueOf(1), mQueue.peek());
+        assertEquals(Integer.valueOf(1), mQueue.peek());
     }
+    @Test
+    public void testClear() {
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        mQueue.clear();
+        assertTrue(mQueue.isEmpty());
+        assertNull(mQueue.peek());
+    }
+    
+    @Test
+    public void testEnsureCapacity() {
+        int initialCapacity = 10; 
+        for (int i = 0; i < initialCapacity; i++) {
+            mQueue.enqueue(i);
+        }
+        mQueue.enqueue(initialCapacity);
+        int expectedNewSize = initialCapacity + 1;
+
+        assertEquals(expectedNewSize, mQueue.size());
+
+        for (int i = 0; i < expectedNewSize; i++) {
+            assertEquals(Integer.valueOf(i), mQueue.dequeue());
+        }
+        assertTrue(mQueue.isEmpty());
+    }
+
+    
+
+    
+    
+    @Test
+    public void testSequentialOperations() {
+
+        assertTrue(mQueue.isEmpty());
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        assertEquals(Integer.valueOf(1), mQueue.dequeue());
+        mQueue.enqueue(3);
+        assertEquals(Integer.valueOf(2), mQueue.peek());
+        assertEquals(Integer.valueOf(2), mQueue.dequeue());
+        assertEquals(Integer.valueOf(3), mQueue.dequeue());
+        assertTrue(mQueue.isEmpty());
+    }
+
+
+    @Test
+    public void testDequeueEmptyQueue() {
+        assertTrue("Queue should be empty", mQueue.isEmpty());
+
+        assertNull("Dequeue from an empty queue should return null", mQueue.dequeue());
+
+    }
+
+    @Test
+    public void testEnsureCapacityWrapAround() {
+        int capacity = 10; 
+        for (int i = 0; i < capacity; i++) {
+            mQueue.enqueue(i);
+        }
+    
+        int dequeueCount = 5;
+        for (int i = 0; i < dequeueCount; i++) {
+            mQueue.dequeue();
+        }
+    
+        for (int i = 0; i < dequeueCount; i++) {
+            mQueue.enqueue(capacity + i);
+        }
+    
+        mQueue.enqueue(capacity + dequeueCount);
+    
+        
+        assertEquals("Queue should handle wrap-around correctly and resize", capacity + 1, mQueue.size());
+
+        assertEquals("First element should be correct after wrap-around", Integer.valueOf(dequeueCount), mQueue.dequeue());
+    
+    
+        for (int i = dequeueCount + 1; i <= capacity + dequeueCount; i++) {
+            assertEquals("Subsequent elements should follow in correct order", Integer.valueOf(i), mQueue.dequeue());
+        }
+    
+        assertTrue("Queue should be empty after all elements are dequeued", mQueue.isEmpty());
+    }
+    
+
 
     @Test
     public void testEnqueue() {
@@ -81,7 +172,11 @@ public class IntQueueTest {
     @Test
     public void testDequeue() {
         // TODO: write your own unit test
-        fail("Test not implemented");
+        mQueue.enqueue(1);
+        mQueue.enqueue(2);
+        assertEquals(Integer.valueOf(1), mQueue.dequeue());
+        assertEquals(Integer.valueOf(2), mQueue.dequeue());
+        assertTrue(mQueue.isEmpty());
     }
 
     @Test
