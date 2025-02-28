@@ -4,27 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>edu.cmu.cs.cs214</groupId>
     <artifactId>rec3</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- importing JUnit test framework       -->
+        <!-- JUnit 4 for unit testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- importing a jar file provided with this recitation (not usually needed) -->
+        <!-- Local jar file for LinkedIntQueue, if needed -->
         <dependency>
-            <groupId>LinkedIntQueue</groupId>
+            <groupId>edu.cmu.cs.cs214</groupId>
             <artifactId>LinkedIntQueue</artifactId>
             <version>1.0</version>
             <scope>system</scope>
@@ -34,48 +34,60 @@
 
     <build>
         <plugins>
-            <!-- adding and configuring a plugin to collect coverage information during test execution -->
+            <!-- Maven Surefire Plugin for running tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+            </plugin>
+            <!-- JaCoCo Plugin for test coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>test</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            <!-- a plugin to support `mvn site` to generate a website summarizing the project -->
+            <!-- Maven Site Plugin for generating project reports and site -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.9.1</version>
+            </plugin>
+            <!-- Maven Project Info Reports Plugin for generating the site with project information -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.1.2</version>
             </plugin>
         </plugins>
     </build>
+
     <reporting>
         <plugins>
-            <!-- a plugin to include test results in the `mvn site` report -->
+            <!-- Maven Surefire Report Plugin for including test results in the Maven site -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.0.0-M5</version>
             </plugin>
-            <!-- final plugin to include coverage information in the `mvn site` report -->
+            <!-- JaCoCo Plugin for coverage reports -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
+                <version>0.8.7</version>
             </plugin>
         </plugins>
     </reporting>
