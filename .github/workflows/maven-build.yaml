@@ -1,47 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+name: Java CI with Maven
 
-    <groupId>edu.cmu.cs.cs214</groupId>
-    <artifactId>rec02</artifactId>
-    <version>1.0-SNAPSHOT</version>
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-    <dependencies>
-        <!-- JUnit 5 dependency -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: Test with Maven
+      run: mvn test
+    - name: Generate Site with Maven
+      run: mvn site
 
-    <build>
-        <plugins>
-            <!-- Surefire plugin for running tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-            <!-- Maven Site Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.9.1</version>
-            </plugin>
-            <!-- Maven Project Info Reports Plugin for generating the site with project information -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.1</version>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+    - name: Upload site to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./target/site
