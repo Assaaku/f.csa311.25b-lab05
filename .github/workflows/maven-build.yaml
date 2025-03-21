@@ -1,35 +1,38 @@
-name: Java CI with Maven
+#####################################################
+## GitHub Actions documentation can be found here: ##
+## https://docs.github.com/en/actions              ##
+#####################################################
 
+# A human-readable name
+name: Run Maven Tests on Push to Main
+
+# This section specifies when this workflow is triggered
+# Here, we specify that it is triggered whenever there is a push to the `main` branch.
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
+# This section specifies the jobs/steps to be executed in the workflow
 jobs:
-  build-and-test:
+  # This workflow only has a single job
+  build:
+    name: Build, test and Package Application
     runs-on: ubuntu-latest
-
+    # Here are the steps to be executed by the machine running this job
     steps:
-      - uses: actions/checkout@v2
+        # Checkout the GitHub repository with the code
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+        # Setup Java
+      - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
           distribution: 'adopt'
+          java-version: 17
+          check-latest: true
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Test with Maven
-        run: mvn test
-
-      - name: Generate Site with Maven
-        run: mvn site
-
-      - name: Upload Maven Site to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/site
+        # Run our tests. Whether they pass/fail will be reflected on the workflow status badge.
+      - name: Build and test with Maven
+        run: mvn -B package

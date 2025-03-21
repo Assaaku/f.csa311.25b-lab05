@@ -120,9 +120,9 @@ public class IntQueueTest {
 
     @Test
     public void testDequeueEmptyQueue() {
-        assertTrue("Queue should be empty", mQueue.isEmpty());
+        assertTrue("queue should be empty", mQueue.isEmpty());
 
-        assertNull("Dequeue from an empty queue should return null", mQueue.dequeue());
+        assertNull("dequeue from an empty queue should return null", mQueue.dequeue());
 
     }
 
@@ -145,16 +145,16 @@ public class IntQueueTest {
         mQueue.enqueue(capacity + dequeueCount);
     
         
-        assertEquals("Queue should handle wrap-around correctly and resize", capacity + 1, mQueue.size());
+        assertEquals("queue should handle wrap-around correctly and resize", capacity + 1, mQueue.size());
 
-        assertEquals("First element should be correct after wrap-around", Integer.valueOf(dequeueCount), mQueue.dequeue());
+        assertEquals("first element should be correct after wrap-around", Integer.valueOf(dequeueCount), mQueue.dequeue());
     
     
         for (int i = dequeueCount + 1; i <= capacity + dequeueCount; i++) {
-            assertEquals("Subsequent elements should follow in correct order", Integer.valueOf(i), mQueue.dequeue());
+            assertEquals("subsequent elements should follow in correct order", Integer.valueOf(i), mQueue.dequeue());
         }
     
-        assertTrue("Queue should be empty after all elements are dequeued", mQueue.isEmpty());
+        assertTrue("queue should be empty after all elements are dequeued", mQueue.isEmpty());
     }
     
 
